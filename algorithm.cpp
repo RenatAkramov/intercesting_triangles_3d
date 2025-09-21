@@ -1,21 +1,30 @@
 #include "include/main.hpp"
 
-const double EPS = 1e-8;
 
-struct AABB
+const double EPS = 1e-12;
+
+
+inline bool tolerant_compare(double a, double b, 
+                            double abs_eps = 1e-12, 
+                            double rel_eps = 1e-12) 
 {
-    double min[3];
-    double max[3];
-};
+    double diff = std::fabs(a - b);
+    if (diff <= abs_eps) return true;
+    return diff <= std::max(std::fabs(a), std::fabs(b)) * rel_eps;
+}
+
+inline bool check_interval_overlap(double a_min, double a_max, double b_min, double b_max) 
+{
+    return (tolerant_compare(a_min, b_max) || a_min < b_max) &&
+           (tolerant_compare(b_min, a_max) || b_min < a_max);
+}
 
 bool compareMinX(const Triangle& a, const Triangle& b)
 {
     return std::min({a.getP1().getX(), a.getP2().getX(), a.getP3().getX()}) < std::min({b.getP1().getX(), b.getP2().getX(), b.getP3().getX()});
 }
 
-
-
-static AABB computeAABB(const Triangle& t) 
+AABB computeAABB(const Triangle& t) 
 {
     AABB box;
     Point3D p1 = t.getP1();
@@ -34,31 +43,44 @@ static AABB computeAABB(const Triangle& t)
 
 static bool checkAABBIntersectionYZ(const AABB& a, const AABB& b) 
 {
-    return (a.min[1] <= b.max[1] + EPS && a.max[1] >= b.min[1] - EPS) &&
-           (a.min[2] <= b.max[2] + EPS && a.max[2] >= b.min[2] - EPS);
-}
+    return check_interval_overlap(a.min[1], a.max[1], b.min[1], b.max[1]) &&
+           check_interval_overlap(a.min[2], a.max[2], b.min[2], b.max[2]);
+}           
 
 static int orient3d(const Point3D& a, const Point3D& b, const Point3D& c, const Point3D& d) 
 {
-    double det = (b.getX() - a.getX()) * (c.getY() - a.getY()) * (d.getZ() - a.getZ())
-               + (b.getY() - a.getY()) * (c.getZ() - a.getZ()) * (d.getX() - a.getX())
-               + (b.getZ() - a.getZ()) * (c.getX() - a.getX()) * (d.getY() - a.getY())
-               - (b.getZ() - a.getZ()) * (c.getY() - a.getY()) * (d.getX() - a.getX())
-               - (b.getY() - a.getY()) * (c.getX() - a.getX()) * (d.getZ() - a.getZ())
-               - (b.getX() - a.getX()) * (c.getZ() - a.getZ()) * (d.getY() - a.getY());
-    return (det > EPS) ? 1 : ((det < -EPS) ? -1 : 0);
-}
+    double adx = a.getX() - d.getX();
+    double bdx = b.getX() - d.getX();
+    double cdx = c.getX() - d.getX();
+    double ady = a.getY() - d.getY();
+    double bdy = b.getY() - d.getY();
+    double cdy = c.getY() - d.getY();
+    double adz = a.getZ() - d.getZ();
+    double bdz = b.getZ() - d.getZ();
+    double cdz = c.getZ() - d.getZ();
 
+    double det = adx * (bdy * cdz - bdz * cdy)
+               + bdx * (cdy * adz - cdz * ady)
+               + cdx * (ady * bdz - adz * bdy);
+
+    double maxVal = std::max({std::abs(adx), std::abs(bdx), std::abs(cdx),
+                             std::abs(ady), std::abs(bdy), std::abs(cdy),
+                             std::abs(adz), std::abs(bdz), std::abs(cdz)});
+
+    double scaledEps = EPS * maxVal * maxVal * maxVal;
+
+    if (det > scaledEps) return 1;
+    if (det < -scaledEps) return -1;
+    return 0;
+}
 
 static Point3D crossProduct(const Point3D& a, const Point3D& b) 
 {
     return Point3D(
         a.getY() * b.getZ() - a.getZ() * b.getY(),
         a.getZ() * b.getX() - a.getX() * b.getZ(),
-        a.getX() * b.getY() - a.getY() * b.getX()
-    );
+        a.getX() * b.getY() - a.getY() * b.getX());
 }
-
 
 static double dotProduct(const Point3D& a, const Point3D& b) 
 {
@@ -76,7 +98,7 @@ static bool pointInTriangle(const Point3D& p, const Point3D& a, const Point3D& b
 
     Point3D n = crossProduct(v0, v1);
     double denom = dotProduct(n, n);
-    if (fabs(denom) < EPS) return false; 
+    if (std::fabs(denom) < EPS) return false; 
     
     Point3D cross1 = crossProduct(v2, v1);
     double u = dotProduct(cross1, n) / denom;
@@ -126,13 +148,11 @@ std::vector<int> findIntersectingTriangles(const std::vector<Triangle>& triangle
     int n = triangles.size();
     if (n == 0) return {};
 
-
     std::vector<AABB> aabbs(n);
     for (int i = 0; i < n; i++) 
     {
         aabbs[i] = computeAABB(triangles[i]);
     }
-
 
     std::vector<Event> events;
     for (int i = 0; i < n; i++) 
@@ -166,7 +186,6 @@ std::vector<int> findIntersectingTriangles(const std::vector<Triangle>& triangle
             activeSet.erase(event.index);
         }
     }
-
 
     std::sort(candidatePairs.begin(), candidatePairs.end());
     candidatePairs.erase(std::unique(candidatePairs.begin(), candidatePairs.end()), candidatePairs.end());

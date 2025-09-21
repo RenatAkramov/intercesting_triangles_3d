@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 #include <set>
+#include <gtest/gtest.h>
 
 class Point3D
 {
@@ -69,14 +70,22 @@ public:
     bool operator<(const Event& other) const 
     {
         if (x != other.x) return x < other.x;
-        return isStart && !other.isStart;
+        if (isStart != other.isStart) return isStart;
         return index < other.index;
     }
+};
+
+struct AABB
+{
+    double min[3];
+    double max[3];
 };
 
 
 std::vector<Triangle> create_triangles();
 //void sort_triangles(std::vector<Triangle> &triangles);
 std::vector<int> findIntersectingTriangles(const std::vector<Triangle>& triangles);
+AABB computeAABB(const Triangle& t); 
+
 
 #endif

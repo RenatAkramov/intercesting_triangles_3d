@@ -17,31 +17,31 @@
 # cmake --build ./build
 # env CTEST_OUTPUT_ON_FAILURE=1 cmake --build build --target test
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 project("something_code")
 
-#enable_testing()
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#SET(SRCS
-#  source/list.c
-#  source/cache.c
-#  source/hash.c
-#)
+enable_testing()
 
-#SET(TESTS ${CMAKE_SOURCE_DIR}/Tests)
 
-#add_library(lclib STATIC ${SRCS})
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+
 
 add_executable(a.out main.cpp algorithm.cpp)
 target_include_directories(a.out PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-#target_link_libraries(a.out lclib)
 
-#file(GLOB testfiles "Tests/*.dat")
-#foreach(file ${testfiles})
-#  add_test(
-#    NAME ${file}
-#    COMMAND bash -c "${CMAKE_SOURCE_DIR}/runtest.sh ${file} ./LC.x"
-#    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-#  set_tests_properties(${file} PROPERTIES DEPENDS LC.x)
-#endforeach()
+add_executable(tests tests/test_main.cpp algorithm.cpp)
+target_include_directories(tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+target_link_libraries(tests ${GTEST_LIBRARIES} pthread)
+
+gtest_discover_tests(tests)
+
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+endif()
