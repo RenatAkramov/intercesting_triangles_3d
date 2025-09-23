@@ -209,5 +209,6 @@ std::vector<int> findIntersectingTriangles(const std::vector<Triangle>& triangle
         }
     }
 
+    std::sort(result.begin(), result.end());
     return result;
 }

@@ -303,6 +303,19 @@ TEST(TriangleIntersectionTest, FloatingPointPrecision)
     EXPECT_EQ(result.size(), 2);
 }
 
+// Тест 28: Два одинаковых треугольника
+TEST(TriangleIntersectionTest, TwoidenticalTriangles) 
+{
+    std::vector<Triangle> triangles = {
+        Triangle(0, 1, 0, 0, 0, 0, 1, 0, 0, 1),
+        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1, 2)
+    };
+    std::vector<int> result = findIntersectingTriangles(triangles);
+    EXPECT_EQ(result.size(), 2);
+    EXPECT_NE(std::find(result.begin(), result.end(), 1), result.end());
+    EXPECT_NE(std::find(result.begin(), result.end(), 2), result.end());
+}
+
 int main(int argc, char **argv) 
 {
     ::testing::InitGoogleTest(&argc, argv);
