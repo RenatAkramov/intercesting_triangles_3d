@@ -685,6 +685,234 @@ TEST(TriangleIntersectionTest, DoubleBoundaryValues)
     EXPECT_TRUE(result.size() >= 0);
 }
 
+// Тест 59: 1000 треугольников без пересечений
+TEST(PerformanceTest, Grid1000TrianglesNoIntersections) 
+{
+    std::vector<Triangle> triangles;
+    int size = 10;
+    int counter = 1;
+    
+    for (int x = 0; x < size; x++) 
+    {
+        for (int y = 0; y < size; y++) 
+        {
+            for (int z = 0; z < size; z++) 
+            {
+                double base_x = x * 5.0;
+                double base_y = y * 5.0;
+                double base_z = z * 5.0;
+                
+                triangles.push_back(Triangle(
+                    base_x, base_y, base_z,
+                    base_x + 1.0, base_y, base_z,
+                    base_x, base_y + 1.0, base_z,
+                    counter++
+                ));
+            }
+        }
+    }
+    
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<int> result = findIntersectingTriangles(triangles);
+    auto end = std::chrono::high_resolution_clock::now();
+    
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    
+    EXPECT_EQ(result.size(), 0);
+    EXPECT_TRUE(duration.count() < 10000);
+}
+
+// Тест 60: 20000 треугольников в случайных положениях
+TEST(PerformanceTest, Random2000Triangles) 
+{
+    std::vector<Triangle> triangles;
+    int counter = 1;
+    std::srand(42); 
+    
+    for (int i = 0; i < 20000; i++) 
+    {
+        double center_x = (std::rand() % 1000) / 10.0;
+        double center_y = (std::rand() % 1000) / 10.0;
+        double center_z = (std::rand() % 1000) / 10.0;
+        
+        double size = 1.0 + (std::rand() % 100) / 100.0; 
+        
+        triangles.push_back(Triangle(
+            center_x, center_y, center_z,
+            center_x + size, center_y, center_z,
+            center_x, center_y + size, center_z,
+            counter++
+        ));
+    }
+    
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<int> result = findIntersectingTriangles(triangles);
+    auto end = std::chrono::high_resolution_clock::now();
+    
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    
+    EXPECT_TRUE(duration.count() < 20000);
+    EXPECT_TRUE(result.size() >= 0 && result.size() <= 2000);
+}
+
+// Тест 61: 1000 треугольников, все пересекаются в одной точке
+TEST(PerformanceTest, AllTrianglesIntersectAtCenter) 
+{
+    std::vector<Triangle> triangles;
+    int counter = 1;
+    
+    for (int i = 0; i < 1000; i++) 
+    {
+        double angle = i * 2 * M_PI / 1000;
+        double next_angle = (i + 1) * 2 * M_PI / 1000;
+        
+        triangles.push_back(Triangle(
+            0, 0, 0, 
+            cos(angle), sin(angle), 0,
+            cos(next_angle), sin(next_angle), 0,
+            counter++
+        ));
+    }
+    
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<int> result = findIntersectingTriangles(triangles);
+    auto end = std::chrono::high_resolution_clock::now();
+    
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    
+    EXPECT_EQ(result.size(), 1000); 
+    EXPECT_TRUE(duration.count() < 50000);
+}
+
+
+// Тест 62: Вырожденные треугольники среди нормальных
+TEST(PerformanceTest, MixedDegenerateAndNormalTriangles) 
+{
+    std::vector<Triangle> triangles;
+    int counter = 1;
+    
+
+    for (int i = 0; i < 200; i++) 
+    {
+        triangles.push_back(Triangle(
+            i * 3.0, 0, 0,
+            i * 3.0 + 1.0, 0, 0,
+            i * 3.0, 1.0, 0,
+            counter++
+        ));
+    }
+    
+
+    for (int i = 0; i < 100; i++) 
+    {
+        triangles.push_back(Triangle(
+            i * 3.0, 100, 100,
+            i * 3.0, 100, 100,
+            i * 3.0, 100, 100,
+            counter++
+        ));
+    }
+    
+  
+    for (int i = 0; i < 1000; i++) 
+    {
+        triangles.push_back(Triangle(
+            i * 3.0, 200, 200,
+            i * 3.0 + 1.0, 200, 200, 
+            i * 3.0 + 0.5, 200, 200, 
+            counter++
+        ));
+    }
+    
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<int> result = findIntersectingTriangles(triangles);
+    auto end = std::chrono::high_resolution_clock::now();
+    
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    
+    EXPECT_EQ(result.size(), 0); 
+    EXPECT_TRUE(duration.count() < 10000);
+}
+
+// Тест 63: Случайные треугольники с различными ориентациями
+TEST(PerformanceTest, RandomOrientations) 
+{
+    std::vector<Triangle> triangles;
+    int counter = 1;
+    std::srand(12345);
+    
+    for (int i = 0; i < 800; i++) 
+    {
+        double cx = (std::rand() % 200) / 10.0;
+        double cy = (std::rand() % 200) / 10.0;
+        double cz = (std::rand() % 200) / 10.0;
+        
+        double dx1 = (std::rand() % 100 - 50) / 50.0;
+        double dy1 = (std::rand() % 100 - 50) / 50.0;
+        double dz1 = (std::rand() % 100 - 50) / 50.0;
+        
+        double dx2 = (std::rand() % 100 - 50) / 50.0;
+        double dy2 = (std::rand() % 100 - 50) / 50.0;
+        double dz2 = (std::rand() % 100 - 50) / 50.0;
+        
+        double dx3 = (std::rand() % 100 - 50) / 50.0;
+        double dy3 = (std::rand() % 100 - 50) / 50.0;
+        double dz3 = (std::rand() % 100 - 50) / 50.0;
+        
+        triangles.push_back(Triangle(
+            cx + dx1, cy + dy1, cz + dz1,
+            cx + dx2, cy + dy2, cz + dz2,
+            cx + dx3, cy + dy3, cz + dz3,
+            counter++
+        ));
+    }
+    
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<int> result = findIntersectingTriangles(triangles);
+    auto end = std::chrono::high_resolution_clock::now();
+    
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    
+    EXPECT_TRUE(result.size() >= 0 && result.size() <= 800);
+    EXPECT_TRUE(duration.count() < 20000);
+}
+
+// Тест 64: Extreme performance test - максимальная нагрузка
+TEST(PerformanceTest, ExtremeLoadTest) 
+{
+    std::vector<Triangle> triangles;
+    int counter = 1;
+    
+    for (int x = 0; x < 15; x++)
+    {
+        for (int y = 0; y < 10; y++) 
+        {
+            for (int z = 0; z < 10; z++) 
+            {
+                double base_x = x * 0.1;
+                double base_y = y * 0.1;
+                double base_z = z * 0.1;
+                
+                triangles.push_back(Triangle(
+                    base_x, base_y, base_z,
+                    base_x + 1.0, base_y, base_z,
+                    base_x, base_y + 1.0, base_z,
+                    counter++
+                ));
+            }
+        }
+    }
+    
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<int> result = findIntersectingTriangles(triangles);
+    auto end = std::chrono::high_resolution_clock::now();
+    
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    
+    EXPECT_GT(result.size(), 1200);
+    EXPECT_TRUE(duration.count() < 30000);
+}
+
 int main(int argc, char **argv) 
 {
     ::testing::InitGoogleTest(&argc, argv);
