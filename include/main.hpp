@@ -83,7 +83,6 @@ struct AABB
 
 
 std::vector<Triangle> create_triangles();
-//void sort_triangles(std::vector<Triangle> &triangles);
 std::vector<int> findIntersectingTriangles(const std::vector<Triangle>& triangles);
 AABB computeAABB(const Triangle& t); 
 
