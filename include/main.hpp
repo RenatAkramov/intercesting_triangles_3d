@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 #include <set>
+#include <chrono>
 #include <gtest/gtest.h>
 
 class Point3D

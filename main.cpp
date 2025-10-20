@@ -36,7 +36,7 @@ std::vector<Triangle> create_triangles()
         #endif
         std::cin >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> x3 >> y3 >> z3;
 
-        triangles.emplace_back(x1, y1, z1, x2, y2, z2, x3, y3, z3, i + 1);
+        triangles.emplace_back(x1, y1, z1, x2, y2, z2, x3, y3, z3, i);
     }
   
     return triangles;
