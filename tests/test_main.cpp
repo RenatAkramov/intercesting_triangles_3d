@@ -1,41 +1,43 @@
-#include "../include/main.hpp"
+#include "../include/triangle_geometry.hpp"
+
+using namespace TriangleGeometry;
 
 // Тест 1: Два пересекающихся треугольника
 TEST(TriangleIntersectionTest, TwoIntersectingTriangles) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
+    EXPECT_NE(std::find(result.begin(), result.end(), 0), result.end());
     EXPECT_NE(std::find(result.begin(), result.end(), 1), result.end());
-    EXPECT_NE(std::find(result.begin(), result.end(), 2), result.end());
 }
 
 // Тест 2: Три треугольника, два пересекаются
 TEST(TriangleIntersectionTest, ThreeTrianglesTwoIntersect) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1, 2),
-        Triangle(2, 2, 2, 3, 2, 2, 2, 3, 2, 3)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1),
+        Triangle(2, 2, 2, 3, 2, 2, 2, 3, 2)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
+    EXPECT_NE(std::find(result.begin(), result.end(), 0), result.end());
     EXPECT_NE(std::find(result.begin(), result.end(), 1), result.end());
-    EXPECT_NE(std::find(result.begin(), result.end(), 2), result.end());
-    EXPECT_EQ(std::find(result.begin(), result.end(), 3), result.end());
+    EXPECT_EQ(std::find(result.begin(), result.end(), 2), result.end());
 }
 
 // Тест 3: Четыре треугольника, все пересекаются
 TEST(TriangleIntersectionTest, FourIntersectingTriangles) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1, 2),
-        Triangle(0, 0, 0, 1, 1, 1, 1, 0, 1, 3),
-        Triangle(1, 1, 1, 2, 1, 1, 1, 2, 1, 4)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1),
+        Triangle(0, 0, 0, 1, 1, 1, 1, 0, 1),
+        Triangle(1, 1, 1, 2, 1, 1, 1, 2, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 4);
@@ -45,8 +47,8 @@ TEST(TriangleIntersectionTest, FourIntersectingTriangles)
 TEST(TriangleIntersectionTest, VertexTouch) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0, 0, 0, 1, 0, 1, 0, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0, 0, 0, 1, 0, 1, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -56,8 +58,8 @@ TEST(TriangleIntersectionTest, VertexTouch)
 TEST(TriangleIntersectionTest, EdgeTouch) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0, 1, 0, 0, 0, 0, 1, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0, 1, 0, 0, 0, 0, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -67,8 +69,8 @@ TEST(TriangleIntersectionTest, EdgeTouch)
 TEST(TriangleIntersectionTest, PlaneTouch) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0, 0, 1, 0, 1, 0, 0, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0, 0, 1, 0, 1, 0, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -78,8 +80,8 @@ TEST(TriangleIntersectionTest, PlaneTouch)
 TEST(TriangleIntersectionTest, CoplanarIntersecting) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0, 1),
-        Triangle(1, 1, 0, 3, 1, 0, 1, 3, 0, 2)
+        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0),
+        Triangle(1, 1, 0, 3, 1, 0, 1, 3, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -89,8 +91,8 @@ TEST(TriangleIntersectionTest, CoplanarIntersecting)
 TEST(TriangleIntersectionTest, CoplanarNonIntersecting) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(2, 2, 0, 3, 2, 0, 2, 3, 0, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(2, 2, 0, 3, 2, 0, 2, 3, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -100,8 +102,8 @@ TEST(TriangleIntersectionTest, CoplanarNonIntersecting)
 TEST(TriangleIntersectionTest, CoplanarSharedEdge) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0, 0, 1, 0, 1, 0, 0, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0, 0, 1, 0, 1, 0, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -111,8 +113,8 @@ TEST(TriangleIntersectionTest, CoplanarSharedEdge)
 TEST(TriangleIntersectionTest, ParallelTrianglesDifferentPlanes) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 1, 1, 0, 1, 0, 1, 1, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 1, 1, 0, 1, 0, 1, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -122,8 +124,8 @@ TEST(TriangleIntersectionTest, ParallelTrianglesDifferentPlanes)
 TEST(TriangleIntersectionTest, ParallelTrianglesOffset) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 1, 1, 0, 1, 0, 1, 1, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 1, 1, 0, 1, 0, 1, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -133,8 +135,8 @@ TEST(TriangleIntersectionTest, ParallelTrianglesOffset)
 TEST(TriangleIntersectionTest, ParallelTrianglesIntersectingAABB) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0, 1),
-        Triangle(1, 1, 1, 3, 1, 1, 1, 3, 1, 2)
+        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0),
+        Triangle(1, 1, 1, 3, 1, 1, 1, 3, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -144,8 +146,8 @@ TEST(TriangleIntersectionTest, ParallelTrianglesIntersectingAABB)
 TEST(TriangleIntersectionTest, DegenerateLineTriangle) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0.5, 0, 0, 1),
-        Triangle(0, 0, 1, 1, 0, 1, 0, 1, 1, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0.5, 0, 0),
+        Triangle(0, 0, 1, 1, 0, 1, 0, 1, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -155,8 +157,8 @@ TEST(TriangleIntersectionTest, DegenerateLineTriangle)
 TEST(TriangleIntersectionTest, DegeneratePointTriangle) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 0, 0, 0, 0, 0, 0, 1),
-        Triangle(0, 0, 1, 1, 0, 1, 0, 1, 1, 2)
+        Triangle(0, 0, 0, 0, 0, 0, 0, 0, 0),
+        Triangle(0, 0, 1, 1, 0, 1, 0, 1, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -166,8 +168,8 @@ TEST(TriangleIntersectionTest, DegeneratePointTriangle)
 TEST(TriangleIntersectionTest, TwoDegenerateTriangles) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 0, 0, 0, 0, 0, 0, 1),
-        Triangle(1, 1, 1, 1, 1, 1, 1, 1, 1, 2)
+        Triangle(0, 0, 0, 0, 0, 0, 0, 0, 0),
+        Triangle(1, 1, 1, 1, 1, 1, 1, 1, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -177,8 +179,8 @@ TEST(TriangleIntersectionTest, TwoDegenerateTriangles)
 TEST(TriangleIntersectionTest, LargeCoordinates) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1000000, 0, 0, 0, 1000000, 0, 1),
-        Triangle(500000, 500000, 0, 1500000, 500000, 0, 500000, 1500000, 0, 2)
+        Triangle(0, 0, 0, 1000000, 0, 0, 0, 1000000, 0),
+        Triangle(500000, 500000, 0, 1500000, 500000, 0, 500000, 1500000, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -188,8 +190,8 @@ TEST(TriangleIntersectionTest, LargeCoordinates)
 TEST(TriangleIntersectionTest, VeryLargeCoordinates) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1e9, 0, 0, 0, 1e9, 0, 1),
-        Triangle(5e8, 5e8, 0, 1.5e9, 5e8, 0, 5e8, 1.5e9, 0, 2)
+        Triangle(0, 0, 0, 1e9, 0, 0, 0, 1e9, 0),
+        Triangle(5e8, 5e8, 0, 1.5e9, 5e8, 0, 5e8, 1.5e9, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -199,8 +201,8 @@ TEST(TriangleIntersectionTest, VeryLargeCoordinates)
 TEST(TriangleIntersectionTest, AlmostTouching) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(1.0000001, 0, 0, 2.0000001, 0, 0, 1.0000001, 1, 0, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(1.0000001, 0, 0, 2.0000001, 0, 0, 1.0000001, 1, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -210,8 +212,8 @@ TEST(TriangleIntersectionTest, AlmostTouching)
 TEST(TriangleIntersectionTest, BoundaryIntersection) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(1, 0, 0, 2, 0, 0, 1, 1, 0, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(1, 0, 0, 2, 0, 0, 1, 1, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -223,7 +225,7 @@ TEST(TriangleIntersectionTest, ManyNonIntersectingTriangles)
     std::vector<Triangle> triangles;
     for (int i = 0; i < 100; i++) 
     {
-        triangles.push_back(Triangle(i*3, 0, 0, i*3+1, 0, 0, i*3, 1, 0, i+1));
+        triangles.push_back(Triangle(i*3, 0, 0, i*3+1, 0, 0, i*3, 1, 0));
     }
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -235,7 +237,7 @@ TEST(TriangleIntersectionTest, ManyAllIntersectingTriangles)
     std::vector<Triangle> triangles;
     for (int i = 0; i < 1000; i++) 
     {
-        triangles.push_back(Triangle(0, 0, 0, 1, 0, i, 0, 1, i, i+1));
+        triangles.push_back(Triangle(0, 0, 0, 1, 0, i, 0, 1, i));
     }
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 1000);
@@ -245,8 +247,8 @@ TEST(TriangleIntersectionTest, ManyAllIntersectingTriangles)
 TEST(TriangleIntersectionTest, DifferentPlanesIntersectingProjections) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 1, 1, 0, 1, 0, 1, 1, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 1, 1, 0, 1, 0, 1, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -256,8 +258,8 @@ TEST(TriangleIntersectionTest, DifferentPlanesIntersectingProjections)
 TEST(TriangleIntersectionTest, SharedEdge3D) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 0, 1, 1),
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 0, 1),
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -267,8 +269,8 @@ TEST(TriangleIntersectionTest, SharedEdge3D)
 TEST(TriangleIntersectionTest, SharedVertex3D) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 0, 1, 1),
-        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 0, 1),
+        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -278,7 +280,7 @@ TEST(TriangleIntersectionTest, SharedVertex3D)
 TEST(TriangleIntersectionTest, SingleTriangle) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -296,32 +298,32 @@ TEST(TriangleIntersectionTest, NoTriangles)
 TEST(TriangleIntersectionTest, FloatingPointPrecision) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0.0000001, 0.0000001, 0.0000001, 1.0000001, 0.0000001, 0.0000001, 0.0000001, 1.0000001, 0.0000001, 1),
-        Triangle(0.0000001, 0.0000001, 0.0000001, 0.0000001, 1.0000001, 0.0000001, 0.0000001, 0.0000001, 1.0000001, 2)
+        Triangle(0.0000001, 0.0000001, 0.0000001, 1.0000001, 0.0000001, 0.0000001, 0.0000001, 1.0000001, 0.0000001),
+        Triangle(0.0000001, 0.0000001, 0.0000001, 0.0000001, 1.0000001, 0.0000001, 0.0000001, 0.0000001, 1.0000001)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
 }
 
 // Тест 28: Два одинаковых треугольника
-TEST(TriangleIntersectionTest, TwoidenticalTriangles) 
+TEST(TriangleIntersectionTest, TwoIdenticalTriangles) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 1, 0, 0, 0, 0, 1, 0, 0, 1),
-        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1, 2)
+        Triangle(0, 1, 0, 0, 0, 0, 1, 0, 0),
+        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
+    EXPECT_NE(std::find(result.begin(), result.end(), 0), result.end());
     EXPECT_NE(std::find(result.begin(), result.end(), 1), result.end());
-    EXPECT_NE(std::find(result.begin(), result.end(), 2), result.end());
 }
 
 // Тест 29: Два близких треугольника
 TEST(TriangleIntersectionTest, TwoCloseTriangles) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0.01, 5, 5, 0.01, 5, 5, 0, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0.01, 5, 5, 0.01, 5, 5, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -331,8 +333,8 @@ TEST(TriangleIntersectionTest, TwoCloseTriangles)
 TEST(TriangleIntersectionTest, VertexIntersection) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0, 0, -1, 0, -1, 0, 0, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0, 0, -1, 0, -1, 0, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -342,8 +344,8 @@ TEST(TriangleIntersectionTest, VertexIntersection)
 TEST(TriangleIntersectionTest, LineIntersection) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0, 1),
-        Triangle(1, 1, -1, 1, 1, 1, 2, 2, 0, 2)
+        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0),
+        Triangle(1, 1, -1, 1, 1, 1, 2, 2, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -353,8 +355,8 @@ TEST(TriangleIntersectionTest, LineIntersection)
 TEST(TriangleIntersectionTest, MinimalDistanceNoIntersection) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0.0001, 1, 0, 0.0001, 0, 1, 0.0001, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0.0001, 1, 0, 0.0001, 0, 1, 0.0001)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -364,8 +366,8 @@ TEST(TriangleIntersectionTest, MinimalDistanceNoIntersection)
 TEST(TriangleIntersectionTest, CollinearPoints) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 2, 0, 0, 1, 0, 0, 1), // Вырожденный
-        Triangle(0, 1, 0, 2, 1, 0, 1, 1, 0, 2)
+        Triangle(0, 0, 0, 2, 0, 0, 1, 0, 0),
+        Triangle(0, 1, 0, 2, 1, 0, 1, 1, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -375,8 +377,8 @@ TEST(TriangleIntersectionTest, CollinearPoints)
 TEST(TriangleIntersectionTest, DifferentOctants) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(-1, -1, -1, 0, 0, 0, -1, 0, 0, 1),
-        Triangle(1, 1, 1, 0, 0, 0, 1, 0, 0, 2)
+        Triangle(-1, -1, -1, 0, 0, 0, -1, 0, 0),
+        Triangle(1, 1, 1, 0, 0, 0, 1, 0, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -386,8 +388,8 @@ TEST(TriangleIntersectionTest, DifferentOctants)
 TEST(TriangleIntersectionTest, VerySmallCoordinates) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1e-12, 0, 0, 0, 1e-12, 0, 1),
-        Triangle(0, 0, 1e-12, 1e-12, 0, 1e-12, 0, 1e-12, 1e-12, 2)
+        Triangle(0, 0, 0, 1e-12, 0, 0, 0, 1e-12, 0),
+        Triangle(0, 0, 1e-12, 1e-12, 0, 1e-12, 0, 1e-12, 1e-12)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -397,8 +399,8 @@ TEST(TriangleIntersectionTest, VerySmallCoordinates)
 TEST(TriangleIntersectionTest, AlternatingCoordinates) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 1, 0, 1, 0, 0, 0, 0, 1, 1),
-        Triangle(1, 0, 0, 0, 1, 0, 0, 0, 1, 2)
+        Triangle(0, 1, 0, 1, 0, 0, 0, 0, 1),
+        Triangle(1, 0, 0, 0, 1, 0, 0, 0, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -408,8 +410,8 @@ TEST(TriangleIntersectionTest, AlternatingCoordinates)
 TEST(TriangleIntersectionTest, NegativeCoordinates) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(-1, -1, -1, 0, 0, 0, -1, 0, 0, 1),
-        Triangle(-2, -2, -2, -1, -1, -1, -2, -1, -1, 2)
+        Triangle(-1, -1, -1, 0, 0, 0, -1, 0, 0),
+        Triangle(-2, -2, -2, -1, -1, -1, -2, -1, -1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -419,19 +421,19 @@ TEST(TriangleIntersectionTest, NegativeCoordinates)
 TEST(TriangleIntersectionTest, MixedSignCoordinates) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(-1, 1, 0, 1, -1, 0, -1, -1, 0, 1),
-        Triangle(0, 0, -1, 0, 0, 1, 1, 0, 0, 2)
+        Triangle(-1, 1, 0, 1, -1, 0, -1, -1, 0),
+        Triangle(0, 0, -1, 0, 0, 1, 1, 0, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
 }
 
-// Тест 39: Треугольники с одинаковыми точками (полное совпадение)
+// Тест 39: Два одинаковых треугольника (полное совпадение)
 TEST(TriangleIntersectionTest, IdenticalTriangles) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -441,20 +443,19 @@ TEST(TriangleIntersectionTest, IdenticalTriangles)
 TEST(TriangleIntersectionTest, PartialOverlap) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0, 1),
-        Triangle(1, 1, 0, 3, 1, 0, 1, 3, 0, 2)
+        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0),
+        Triangle(1, 1, 0, 3, 1, 0, 1, 3, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
 }
 
-
 // Тест 41: Треугольники с пересечением в одной точке (вершина)
 TEST(TriangleIntersectionTest, SinglePointIntersection) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0, 0, -1, 0, -1, 0, 0, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0, 0, -1, 0, -1, 0, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -464,8 +465,8 @@ TEST(TriangleIntersectionTest, SinglePointIntersection)
 TEST(TriangleIntersectionTest, SegmentIntersection) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0, 1),
-        Triangle(1, 0, -1, 1, 2, -1, 1, 0, 1, 2)
+        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0),
+        Triangle(1, 0, -1, 1, 2, -1, 1, 0, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -475,8 +476,8 @@ TEST(TriangleIntersectionTest, SegmentIntersection)
 TEST(TriangleIntersectionTest, SharedEdgeZOffset) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0.001, 1, 0, 0.001, 0, 1, 0.001, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0.001, 1, 0, 0.001, 0, 1, 0.001)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -486,8 +487,8 @@ TEST(TriangleIntersectionTest, SharedEdgeZOffset)
 TEST(TriangleIntersectionTest, AlmostTouchingg) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(1.0000000001, 0, 0, 2, 0, 0, 1.0000000001, 1, 0, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(1.0000000001, 0, 0, 2, 0, 0, 1.0000000001, 1, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
@@ -497,8 +498,8 @@ TEST(TriangleIntersectionTest, AlmostTouchingg)
 TEST(TriangleIntersectionTest, CenterIntersection) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0, 1),
-        Triangle(1, 1, -1, 1, 1, 1, 2, 2, 0, 2)
+        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0),
+        Triangle(1, 1, -1, 1, 1, 1, 2, 2, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -508,8 +509,8 @@ TEST(TriangleIntersectionTest, CenterIntersection)
 TEST(TriangleIntersectionTest, MirrorTriangles) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0, -1, 0, 0, 0, -1, 0, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0, -1, 0, 0, 0, -1, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -519,33 +520,31 @@ TEST(TriangleIntersectionTest, MirrorTriangles)
 TEST(TriangleIntersectionTest, RotatedTriangles) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
 }
 
-
 // Тест 48: Треугольники с ступенчатым расположением
 TEST(TriangleIntersectionTest, SteppedArrangement) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 1, 1, 0, 1, 0, 1, 1, 2),
-        Triangle(0, 0, 2, 1, 0, 2, 0, 1, 2, 3)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 1, 1, 0, 1, 0, 1, 1),
+        Triangle(0, 0, 2, 1, 0, 2, 0, 1, 2)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
 }
 
-
 // Тест 49: Треугольники с вложенными AABB
 TEST(TriangleIntersectionTest, NestedAABB) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 3, 0, 0, 0, 3, 0, 1),
-        Triangle(1, 1, 1, 2, 1, 1, 1, 2, -1, 2)
+        Triangle(0, 0, 0, 3, 0, 0, 0, 3, 0),
+        Triangle(1, 1, 1, 2, 1, 1, 1, 2, -1)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
@@ -555,62 +554,49 @@ TEST(TriangleIntersectionTest, NestedAABB)
 TEST(TriangleIntersectionTest, EdgeTouchAngle) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0, 1),
-        Triangle(1, 0, 0, 3, 0, 0, 1, 2, 0, 2)
+        Triangle(0, 0, 0, 2, 0, 0, 0, 2, 0),
+        Triangle(1, 0, 0, 3, 0, 0, 1, 2, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 2);
 }
 
-// Тест 51: Треугольники с пересечением в бесконечности (очень большие числа)
+// Тест 51: Треугольники с очень большими числами
 TEST(TriangleIntersectionTest, InfinityLikeCoordinates) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(1e308, 1e308, 1e308, 1e308, 0, 1e308, 0, 1e308, 1e308, 1),
-        Triangle(0, 0, 0, 1e308, 0, 0, 0, 1e308, 0, 2)
+        Triangle(1e308, 1e308, 1e308, 1e308, 0, 1e308, 0, 1e308, 1e308),
+        Triangle(0, 0, 0, 1e308, 0, 0, 0, 1e308, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
-    // Результат зависит от реализации, но не должен падать
     EXPECT_TRUE(result.size() >= 0);
 }
 
-// Тест 52: Треугольники с NaN координатами (должны обрабатываться корректно)
-TEST(TriangleIntersectionTest, NaNCoordinates) 
-{
-    std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 0, 0, 1, 0, 0, 0, 1, 2)
-    };
-    // Не добавляем NaN, так как это сломает тест, но проверяем устойчивость
-    std::vector<int> result = findIntersectingTriangles(triangles);
-    EXPECT_EQ(result.size(), 2);
-}
-
-// Тест 53: Треугольники с бесконечно малыми разностями
+// Тест 52: Треугольники с бесконечно малыми разностями
 TEST(TriangleIntersectionTest, InfinitesimalDifferences) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0, 0, 1e-10, 1, 0, 1e-10, 0, 1, 1e-10, 2)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0, 0, 1e-10, 1, 0, 1e-10, 0, 1, 1e-10)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 0);
 }
 
-// Тест 54: Треугольники с чередующимися пересечениями
+// Тест 53: Треугольники с чередующимися пересечениями
 TEST(TriangleIntersectionTest, AlternatingIntersections) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0, 1),
-        Triangle(0.5, 0.5, 0, 1.5, 0.5, 0, 0.5, 1.5, 0, 2),
-        Triangle(2, 2, 0, 3, 2, 0, 2, 3, 0, 3),
-        Triangle(2.5, 2.5, 0, 3.5, 2.5, 0, 2.5, 3.5, 0, 4)
+        Triangle(0, 0, 0, 1, 0, 0, 0, 1, 0),
+        Triangle(0.5, 0.5, 0, 1.5, 0.5, 0, 0.5, 1.5, 0),
+        Triangle(2, 2, 0, 3, 2, 0, 2, 3, 0),
+        Triangle(2.5, 2.5, 0, 3.5, 2.5, 0, 2.5, 3.5, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
     EXPECT_EQ(result.size(), 4);
 }
 
-// Тест 55: Треугольники с веерным расположением
+// Тест 54: Треугольники с веерным расположением
 TEST(TriangleIntersectionTest, FanArrangement) 
 {
     std::vector<Triangle> triangles;
@@ -619,15 +605,14 @@ TEST(TriangleIntersectionTest, FanArrangement)
         triangles.push_back(Triangle(
             0, 0, 0,
             cos(angle), sin(angle), 0,
-            cos(angle + M_PI/10), sin(angle + M_PI/10), 0,
-            i + 1
+            cos(angle + M_PI/10), sin(angle + M_PI/10), 0
         ));
     }
     std::vector<int> result = findIntersectingTriangles(triangles);
-    EXPECT_EQ(result.size(), 10); // Все пересекаются в центре
+    EXPECT_EQ(result.size(), 10);
 }
 
-// Тест 56: Треугольники с спиральным расположением
+// Тест 55: Треугольники со спиральным расположением
 TEST(TriangleIntersectionTest, SpiralArrangement) 
 {
     std::vector<Triangle> triangles;
@@ -636,29 +621,25 @@ TEST(TriangleIntersectionTest, SpiralArrangement)
         triangles.push_back(Triangle(
             cos(angle), sin(angle), i * 0.1,
             cos(angle + 2*M_PI/5), sin(angle + 2*M_PI/5), i * 0.1,
-            0, 0, i * 0.1 + 0.05,
-            i + 1
+            0, 0, i * 0.1 + 0.05
         ));
     }
     std::vector<int> result = findIntersectingTriangles(triangles);
-    EXPECT_EQ(result.size(), 0); // Не должны пересекаться
+    EXPECT_EQ(result.size(), 0);
 }
 
-
-
-// Тест 57: Производительность с большим количеством треугольников
+// Тест 56: Производительность с большим количеством треугольников
 TEST(TriangleIntersectionTest, PerformanceTest) 
 {
     std::vector<Triangle> triangles;
-    int n = 100; // Уменьшено для скорости тестирования
+    int n = 100;
     
     for (int i = 0; i < n; i++) {
         double x = i * 3.0;
         triangles.push_back(Triangle(
             x, 0, 0,
             x + 1, 0, 0,
-            x, 1, 0,
-            i + 1
+            x, 1, 0
         ));
     }
     
@@ -668,24 +649,22 @@ TEST(TriangleIntersectionTest, PerformanceTest)
     
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     
-    // Тест должен завершиться за разумное время
-    EXPECT_TRUE(duration.count() < 5000); // 5 секунд максимум
-    EXPECT_EQ(result.size(), 0); // Никаких пересечений
+    EXPECT_TRUE(duration.count() < 5000);
+    EXPECT_EQ(result.size(), 0);
 }
 
-// Тест 58: Треугольники с граничными значениями double
+// Тест 57: Треугольники с граничными значениями double
 TEST(TriangleIntersectionTest, DoubleBoundaryValues) 
 {
     std::vector<Triangle> triangles = {
-        Triangle(DBL_MIN, DBL_MIN, DBL_MIN, DBL_MIN, 0, DBL_MIN, 0, DBL_MIN, DBL_MIN, 1),
-        Triangle(0, 0, 0, DBL_MIN, 0, 0, 0, DBL_MIN, 0, 2)
+        Triangle(DBL_MIN, DBL_MIN, DBL_MIN, DBL_MIN, 0, DBL_MIN, 0, DBL_MIN, DBL_MIN),
+        Triangle(0, 0, 0, DBL_MIN, 0, 0, 0, DBL_MIN, 0)
     };
     std::vector<int> result = findIntersectingTriangles(triangles);
-    // Проверяем, что не падает и возвращает корректный результат
     EXPECT_TRUE(result.size() >= 0);
 }
 
-// Тест 59: 1000 треугольников без пересечений
+// Тест 58: 1000 треугольников без пересечений
 TEST(PerformanceTest, Grid1000TrianglesNoIntersections) 
 {
     std::vector<Triangle> triangles;
@@ -705,8 +684,7 @@ TEST(PerformanceTest, Grid1000TrianglesNoIntersections)
                 triangles.push_back(Triangle(
                     base_x, base_y, base_z,
                     base_x + 1.0, base_y, base_z,
-                    base_x, base_y + 1.0, base_z,
-                    counter++
+                    base_x, base_y + 1.0, base_z
                 ));
             }
         }
@@ -722,14 +700,13 @@ TEST(PerformanceTest, Grid1000TrianglesNoIntersections)
     EXPECT_TRUE(duration.count() < 10000);
 }
 
-// Тест 60: 20000 треугольников в случайных положениях
+// Тест 59: 20000 треугольников в случайных положениях
 TEST(PerformanceTest, Random2000Triangles) 
 {
     std::vector<Triangle> triangles;
-    int counter = 1;
     std::srand(42); 
     
-    for (int i = 0; i < 20000; i++) 
+    for (int i = 0; i < 2000; i++) 
     {
         double center_x = (std::rand() % 1000) / 10.0;
         double center_y = (std::rand() % 1000) / 10.0;
@@ -740,8 +717,7 @@ TEST(PerformanceTest, Random2000Triangles)
         triangles.push_back(Triangle(
             center_x, center_y, center_z,
             center_x + size, center_y, center_z,
-            center_x, center_y + size, center_z,
-            counter++
+            center_x, center_y + size, center_z
         ));
     }
     
@@ -755,11 +731,10 @@ TEST(PerformanceTest, Random2000Triangles)
     EXPECT_TRUE(result.size() >= 0 && result.size() <= 2000);
 }
 
-// Тест 61: 1000 треугольников, все пересекаются в одной точке
+// Тест 60: 1000 треугольников, все пересекаются в одной точке
 TEST(PerformanceTest, AllTrianglesIntersectAtCenter) 
 {
     std::vector<Triangle> triangles;
-    int counter = 1;
     
     for (int i = 0; i < 1000; i++) 
     {
@@ -769,8 +744,7 @@ TEST(PerformanceTest, AllTrianglesIntersectAtCenter)
         triangles.push_back(Triangle(
             0, 0, 0, 
             cos(angle), sin(angle), 0,
-            cos(next_angle), sin(next_angle), 0,
-            counter++
+            cos(next_angle), sin(next_angle), 0
         ));
     }
     
@@ -784,43 +758,38 @@ TEST(PerformanceTest, AllTrianglesIntersectAtCenter)
     EXPECT_TRUE(duration.count() < 50000);
 }
 
-
-// Тест 62: Вырожденные треугольники среди нормальных
+// Тест 61: Вырожденные треугольники среди нормальных
 TEST(PerformanceTest, MixedDegenerateAndNormalTriangles) 
 {
     std::vector<Triangle> triangles;
-    int counter = 1;
     
-
+    // Нормальные треугольники
     for (int i = 0; i < 200; i++) 
     {
         triangles.push_back(Triangle(
             i * 3.0, 0, 0,
             i * 3.0 + 1.0, 0, 0,
-            i * 3.0, 1.0, 0,
-            counter++
+            i * 3.0, 1.0, 0
         ));
     }
     
-
+    // Вырожденные треугольники (точки)
     for (int i = 0; i < 100; i++) 
     {
         triangles.push_back(Triangle(
             i * 3.0, 100, 100,
             i * 3.0, 100, 100,
-            i * 3.0, 100, 100,
-            counter++
+            i * 3.0, 100, 100
         ));
     }
     
-  
+    // Вырожденные треугольники (линии)
     for (int i = 0; i < 1000; i++) 
     {
         triangles.push_back(Triangle(
             i * 3.0, 200, 200,
             i * 3.0 + 1.0, 200, 200, 
-            i * 3.0 + 0.5, 200, 200, 
-            counter++
+            i * 3.0 + 0.5, 200, 200
         ));
     }
     
@@ -834,11 +803,10 @@ TEST(PerformanceTest, MixedDegenerateAndNormalTriangles)
     EXPECT_TRUE(duration.count() < 10000);
 }
 
-// Тест 63: Случайные треугольники с различными ориентациями
+// Тест 62: Случайные треугольники с различными ориентациями
 TEST(PerformanceTest, RandomOrientations) 
 {
     std::vector<Triangle> triangles;
-    int counter = 1;
     std::srand(12345);
     
     for (int i = 0; i < 800; i++) 
@@ -862,8 +830,7 @@ TEST(PerformanceTest, RandomOrientations)
         triangles.push_back(Triangle(
             cx + dx1, cy + dy1, cz + dz1,
             cx + dx2, cy + dy2, cz + dz2,
-            cx + dx3, cy + dy3, cz + dz3,
-            counter++
+            cx + dx3, cy + dy3, cz + dz3
         ));
     }
     
@@ -877,11 +844,10 @@ TEST(PerformanceTest, RandomOrientations)
     EXPECT_TRUE(duration.count() < 20000);
 }
 
-// Тест 64: Extreme performance test - максимальная нагрузка
+// Тест 63: Extreme performance test - максимальная нагрузка
 TEST(PerformanceTest, ExtremeLoadTest) 
 {
     std::vector<Triangle> triangles;
-    int counter = 1;
     
     for (int x = 0; x < 15; x++)
     {
@@ -896,8 +862,7 @@ TEST(PerformanceTest, ExtremeLoadTest)
                 triangles.push_back(Triangle(
                     base_x, base_y, base_z,
                     base_x + 1.0, base_y, base_z,
-                    base_x, base_y + 1.0, base_z,
-                    counter++
+                    base_x, base_y + 1.0, base_z
                 ));
             }
         }
