@@ -45,10 +45,11 @@ namespace TriangleGeometry
         Point3D<type> getP3() const { return p3; }       
     };
 
+    template <typename type = double>
     class Event
     {
     public:
-        double x;
+        type x;
         int index;
         bool isStart;
 
@@ -63,10 +64,11 @@ namespace TriangleGeometry
         }
     };
 
+    template <typename type = double>
     struct AABB
     {
-        double min[3];
-        double max[3];
+        type min[3];
+        type max[3];
     };
     
 
@@ -446,8 +448,8 @@ namespace TriangleGeometry
         return !std::isnan(value) && !std::isinf(value) && value != std::numeric_limits<type>::max();
     }
 
-
-    bool checkAABBIntersectionYZ(const AABB& a, const AABB& b) 
+    template <typename type>
+    bool checkAABBIntersectionYZ(const AABB<type>& a, const AABB<type>& b) 
     {
         return check_interval_overlap(a.min[1], a.max[1], b.min[1], b.max[1]) &&
                check_interval_overlap(a.min[2], a.max[2], b.min[2], b.max[2]);
@@ -515,24 +517,24 @@ namespace TriangleGeometry
         int n = triangles.size();
         if (n == 0) return {};
 
-        std::vector<AABB> aabbs(n);
+        std::vector<AABB<type>> aabbs(n);
         for (int i = 0; i < n; i++) 
         {
             aabbs[i] = computeAABB(triangles[i]);
         }
 
-        std::vector<Event> events;
+        std::vector<Event<type>> events;
         for (int i = 0; i < n; i++) 
         {
-            events.push_back(Event(aabbs[i].min[0], i, true));
-            events.push_back(Event(aabbs[i].max[0], i, false));
+            events.push_back(Event<type>(static_cast<type>(aabbs[i].min[0]), i, true));
+            events.push_back(Event<type>(static_cast<type>(aabbs[i].max[0]), i, false));
         }
         std::sort(events.begin(), events.end());
 
         std::set<int> activeSet;
         std::vector<std::pair<int, int>> candidatePairs;
 
-        for (const Event& event : events) 
+        for (const auto& event : events) 
         {
             if (event.isStart) 
             {
@@ -581,9 +583,9 @@ namespace TriangleGeometry
     }
 
     template <typename type>
-    AABB computeAABB(const Triangle<type>& t)
+    AABB<type> computeAABB(const Triangle<type>& t)
     {
-        AABB box;
+        AABB<type> box;
         Point3D p1 = t.getP1();
         Point3D p2 = t.getP2();
         Point3D p3 = t.getP3();
